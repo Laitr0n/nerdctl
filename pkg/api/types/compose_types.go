@@ -24,3 +24,14 @@ type ComposeBuildCommandOptions struct {
 	// Progress is a flag to show the type of progress output (auto, plain, tty)
 	Progress string
 }
+
+type ComposeConfigCommandOptions struct {
+	// Quiet is a flag to only validate the configuration, without printing.
+	Quiet bool
+	// Services is flag to print the service names, one per line.
+	Services bool
+	// Volumes is a flag to print the volume names, one per line.
+	Volumes bool
+	// Hash is a flag to print the service configuration hash, one per line.
+	Hash string
+}

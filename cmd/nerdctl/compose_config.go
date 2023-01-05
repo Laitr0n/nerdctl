@@ -18,7 +18,7 @@ package main
 
 import (
 	"fmt"
-
+	"github.com/containerd/nerdctl/pkg/api/types"
 	"github.com/containerd/nerdctl/pkg/clientutil"
 	"github.com/containerd/nerdctl/pkg/composer"
 	"github.com/spf13/cobra"
@@ -47,19 +47,21 @@ func composeConfigAction(cmd *cobra.Command, args []string) error {
 		// TODO: support specifying service names as args
 		return fmt.Errorf("arguments %v not supported", args)
 	}
-	quiet, err := cmd.Flags().GetBool("quiet")
+	options := types.ComposeConfigCommandOptions{}
+	var err error
+	options.Quiet, err = cmd.Flags().GetBool("quiet")
 	if err != nil {
 		return err
 	}
-	services, err := cmd.Flags().GetBool("services")
+	options.Services, err = cmd.Flags().GetBool("services")
 	if err != nil {
 		return err
 	}
-	volumes, err := cmd.Flags().GetBool("volumes")
+	options.Volumes, err = cmd.Flags().GetBool("volumes")
 	if err != nil {
 		return err
 	}
-	hash, err := cmd.Flags().GetString("hash")
+	options.Hash, err = cmd.Flags().GetString("hash")
 	if err != nil {
 		return err
 	}
@@ -79,13 +81,13 @@ func composeConfigAction(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	if quiet {
+	if options.Quiet {
 		return nil
 	}
 	co := composer.ConfigOptions{
-		Services: services,
-		Volumes:  volumes,
-		Hash:     hash,
+		Services: options.Services,
+		Volumes:  options.Volumes,
+		Hash:     options.Hash,
 	}
 	return c.Config(ctx, cmd.OutOrStdout(), co)
 }
